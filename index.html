@@ -35,7 +35,6 @@ a:focus-visible{outline:2px solid #C8F169;outline-offset:3px;border-radius:4px}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
 .rv.in{opacity:1;transform:none}
 }
-@media (max-width:700px){header{position:static!important}header nav{gap:0 16px!important}}
 
 .vcard{position:relative;display:block;width:100%;aspect-ratio:16/9;padding:0;border:1px solid #262B33;border-radius:10px;background-color:#0B0D10;background-size:cover;background-position:center;cursor:pointer;overflow:hidden}
 .vcard.vwide{aspect-ratio:1400/588;border-radius:12px}
@@ -48,6 +47,22 @@ a:focus-visible{outline:2px solid #C8F169;outline-offset:3px;border-radius:4px}
 .vframe.vwide{flex:1 1 100%;border-radius:12px}
 @media (max-width:700px){article{padding:22px!important}}
 .vpair{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+
+.navtoggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid #343A44;border-radius:10px;background:transparent;color:#ECEDEE;cursor:pointer}
+.navtoggle:focus-visible{outline:2px solid #C8F169;outline-offset:2px}
+.navtoggle line{transition:transform .2s ease,opacity .2s ease;transform-origin:12px 12px}
+.navtoggle[aria-expanded="true"] .l1{transform:translateY(5px) rotate(45deg)}
+.navtoggle[aria-expanded="true"] .l2{opacity:0}
+.navtoggle[aria-expanded="true"] .l3{transform:translateY(-5px) rotate(-45deg)}
+@media (max-width:760px){
+header{position:sticky!important;top:0}
+header>div{flex-wrap:wrap!important}
+.navtoggle{display:inline-flex}
+#site-nav{display:none!important;flex-basis:100%;flex-direction:column;gap:0!important;padding:8px 0 6px}
+#site-nav.open{display:flex!important}
+#site-nav a{padding:14px 4px!important;border-bottom:1px solid #1E2229;font-size:17px!important}
+#site-nav a:last-child{border-bottom:0;margin-top:10px;text-align:center;padding:14px!important}
+}
 </style>
 <script>
 document.addEventListener('DOMContentLoaded',function(){
@@ -64,6 +79,15 @@ f.title=b.getAttribute('aria-label').replace(/^Play /,'');
 f.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
 f.setAttribute('allowfullscreen','');b.replaceWith(f);
 });
+
+(function(){
+var b=document.querySelector('.navtoggle'),n=document.getElementById('site-nav');if(!b||!n)return;
+function set(o){n.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Close menu':'Open menu');}
+b.addEventListener('click',function(){set(!n.classList.contains('open'));});
+n.addEventListener('click',function(e){if(e.target.closest('a'))set(false);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&n.classList.contains('open')){set(false);b.focus();}});
+window.addEventListener('resize',function(){if(window.innerWidth>760)set(false);});
+})();
 </script>
 </head>
 <body>
@@ -72,7 +96,8 @@ f.setAttribute('allowfullscreen','');b.replaceWith(f);
   <header style="border-bottom: 1px solid #1E2229">
     <div style="max-width: 1180px; margin: 0 auto; padding: 18px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px">
       <a href="#top" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; text-decoration: none; letter-spacing: -0.01em" aria-label="Chisom Caleb, home">CC<span style="color: #C8F169">.</span></a>
-      <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 4px 22px; font-size: 15px; font-weight: 500">
+      <button type="button" class="navtoggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line class="l1" x1="4" y1="7" x2="20" y2="7"/><line class="l2" x1="4" y1="12" x2="20" y2="12"/><line class="l3" x1="4" y1="17" x2="20" y2="17"/></svg></button>
+      <nav id="site-nav" aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 4px 22px; font-size: 15px; font-weight: 500">
         <a href="#work" style="color: #A3A9B2; text-decoration: none; padding: 10px 0">Projects</a>
         <a href="#ai" style="color: #A3A9B2; text-decoration: none; padding: 10px 0">AI</a>
         <a href="#web3" style="color: #A3A9B2; text-decoration: none; padding: 10px 0">Web3</a>
